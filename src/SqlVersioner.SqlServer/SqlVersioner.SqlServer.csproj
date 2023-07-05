@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\SqlVersioner.Abstractions\SqlVersioner.Abstractions.csproj" />
+    </ItemGroup>
+</Project>
