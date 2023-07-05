@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SqlVersioner.Abstractions\SqlVersioner.Abstractions.csproj"/>
+        <ProjectReference Include="..\SqlVersioner.Abstractions\SqlVersioner.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>
