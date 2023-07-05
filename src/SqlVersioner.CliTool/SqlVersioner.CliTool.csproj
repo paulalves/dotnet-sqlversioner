@@ -2,6 +2,11 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
+        <Authors>Paul Alves</Authors>
+        <PackageProjectUrl>https://github.com/paulalves/dotnet-sqlversioner</PackageProjectUrl>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>sqlversioner</ToolCommandName>
+        <PackageOutputPath>../../artifacts/nupkg</PackageOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
