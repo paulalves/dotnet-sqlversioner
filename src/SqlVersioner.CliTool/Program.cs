@@ -1,22 +1,47 @@
 ﻿namespace SqlVersioner.CliTool
 {
+  using System;
+  using System.Threading.Tasks;
+  using Microsoft.Data.SqlClient;
   using SqlVersioner.Abstractions.Arguments;
 
   public static class Program
   {
-    public static int Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
-      CliArguments.Parse(new []
-      {
-        "--user", "sa",
-        "--password", "Password123",
-        "--database", "SqlVersioner",
-        "--server", "localhost",
-        "--output", "~/SqlVersioner",
-        "--verbosity", "2"
-      });
+      var arguments = CliArguments.Parse(args);
       
-      return 0; 
+      try
+      {
+        var builder = new SqlConnectionStringBuilder
+        {
+          UserID = arguments.User,
+          InitialCatalog = arguments.Database,
+          DataSource = arguments.Server,
+          Password = arguments.Password,
+          Encrypt = true,
+          TrustServerCertificate = true
+        };
+
+        await Database
+          .WriteAsync(
+            builder.ConnectionString, 
+            arguments.Output, arguments.Verbosity)
+          .ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        Console.ForegroundColor = ConsoleColor.Red;
+        await Console.Error.WriteLineAsync(e.Message);
+        await Console.Error.WriteLineAsync(e.ToString());
+        return 1;
+      }
+      finally
+      {
+        Console.ResetColor();
+      }
+      
+      return 0;
     }
   }
 }

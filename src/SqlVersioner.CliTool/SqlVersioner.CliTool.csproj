@@ -6,6 +6,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SqlVersioner.Abstractions\SqlVersioner.Abstractions.csproj" />
+        <ProjectReference Include="..\SqlVersioner.SqlServer\SqlVersioner.SqlServer.csproj" />
     </ItemGroup>
 
 </Project>
