@@ -6,11 +6,24 @@ namespace SqlVersioner.SqlServer
   using SqlVersioner.Abstractions.Database;
   using SqlVersioner.Abstractions.Logging;
 
+  /// <summary>
+  /// <see cref="ISqlConnectionFactory"/> implementation for SQL Server.
+  /// </summary>
+  /// <remarks>
+  /// <para>This class is used to create a SQL connection <see cref="ISqlConnection"/>.</para>
+  /// </remarks>
   public class SqlConnectionFactory : ISqlConnectionFactory
   {
     private readonly string connectionString;
     private readonly ILogger logger;
 
+    /// <summary>
+    /// Constructor with arguments.
+    /// </summary>
+    /// <param name="connectionString">The connection string.</param>
+    /// <param name="logger">The logger.</param>
+    /// <exception cref="System.ArgumentNullException">The connection string cannot be null or empty.</exception>
+    /// <exception cref="System.ArgumentNullException">The logger cannot be null.</exception>
     public SqlConnectionFactory(string connectionString, ILogger logger)
     {
       if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException(nameof(connectionString), "The connection string cannot be null or empty.");
@@ -25,6 +38,7 @@ namespace SqlVersioner.SqlServer
       get { return this.logger; }
     }
     
+    /// <inheritdoc />
     public async Task<ISqlConnection> CreateConnectionAsync(CancellationToken cancelToken = default)
     {
       if (string.IsNullOrEmpty(connectionString)) throw new InvalidOperationException("The connection string cannot be null or empty.");

@@ -7,12 +7,26 @@ namespace SqlVersioner.SqlServer
   using SqlVersioner.Abstractions.Database;
   using SqlVersioner.Abstractions.Logging;
 
+  /// <summary>
+  /// SqlConnection class.
+  /// </summary>
+  /// <seealso cref="SqlVersioner.Abstractions.Database.ISqlConnection" />
+  /// <seealso cref="System.IDisposable" />
+  /// <seealso cref="System.IAsyncDisposable" />
+  /// <remarks>This class is a wrapper around the <see cref="Microsoft.Data.SqlClient.SqlConnection"/> class</remarks>
   public class SqlConnection : ISqlConnection
   {
     private readonly Microsoft.Data.SqlClient.SqlConnection connection;
     private readonly ILogger logger;
     private bool isDisposed;
 
+    /// <summary>
+    /// Constructor with arguments.
+    /// </summary>
+    /// <param name="connection">The connection.</param>
+    /// <param name="logger">The logger.</param>
+    /// <exception cref="System.ArgumentNullException">The connection cannot be null.</exception>
+    /// <exception cref="System.ArgumentNullException">The logger cannot be null.</exception>
     public SqlConnection(Microsoft.Data.SqlClient.SqlConnection connection, ILogger logger)
     {
       if (connection == null) throw new ArgumentNullException(nameof(connection), "The connection cannot be null.");
@@ -27,6 +41,7 @@ namespace SqlVersioner.SqlServer
       get { return this.logger; }
     }
 
+    /// <inheritdoc />
     public async Task<T> ExecuteScalarAsync<T>(string sqlCommand, CancellationToken cancelToken = default)
     {
       if (string.IsNullOrEmpty(sqlCommand)) throw new ArgumentNullException(nameof(sqlCommand), "The sql command cannot be null or empty.");
@@ -54,6 +69,7 @@ namespace SqlVersioner.SqlServer
       }
     }
 
+    /// <inheritdoc />
     public async Task<System.Data.DataTable> ExecuteQueryAsync(string sqlCommand, CancellationToken cancelToken = default)
     {
       if (string.IsNullOrEmpty(sqlCommand)) throw new ArgumentNullException(nameof(sqlCommand), "The sql command cannot be null or empty.");
@@ -80,6 +96,7 @@ namespace SqlVersioner.SqlServer
       }
     }
 
+    /// <inheritdoc />
     public async Task<int> ExecuteNonQueryAsync(string sqlCommand, CancellationToken cancelToken = default)
     {
       if (string.IsNullOrEmpty(sqlCommand)) throw new ArgumentNullException(nameof(sqlCommand), "The sql command cannot be null or empty.");
@@ -103,6 +120,7 @@ namespace SqlVersioner.SqlServer
       }
     }
 
+    /// <inheritdoc />
     public async Task<IDataReader> ExecuteReaderAsync(string sqlCommand, CancellationToken cancelToken = default)
     {
       if (string.IsNullOrEmpty(sqlCommand)) throw new ArgumentNullException(nameof(sqlCommand), "The sql command cannot be null or empty.");
@@ -114,8 +132,8 @@ namespace SqlVersioner.SqlServer
       var reader = new SqlDataReader(command, transaction, Logger);
       
       Logger.LogNormal("Returning reader...");
-      
-      return reader.ExecuteReader();
+
+      return await reader.ExecuteReaderAsync(cancelToken).ConfigureAwait(false);
     }
 
     private async Task<(SqlCommand, SqlTransaction)> PrepareAsync(string sqlCommand, CancellationToken cancelToken = default)
@@ -129,13 +147,15 @@ namespace SqlVersioner.SqlServer
 
       command.CommandText = sqlCommand;
       command.Connection = this.connection;
-      //command.CommandType = CommandType.Text;
       command.Transaction = transaction;
 
       return (command, transaction);
     }
     
+    /// <inheritdoc />
+#pragma warning disable CA1816
     public void Dispose()
+#pragma warning restore CA1816
     {
       if (this.isDisposed) return;
       
@@ -146,7 +166,10 @@ namespace SqlVersioner.SqlServer
       this.connection.Dispose();
     }
 
+    /// <inheritdoc />
+#pragma warning disable CA1816
     public ValueTask DisposeAsync()
+#pragma warning restore CA1816
     {
       if (this.isDisposed) return ValueTask.CompletedTask;
       

@@ -7,6 +7,12 @@ namespace SqlVersioner.SqlServer
   using SqlVersioner.Abstractions.Database;
   using SqlVersioner.Abstractions.Logging;
   
+  /// <summary>
+  /// <see cref="ISqlDdlReader"/> Sql DDL reader implementation for SQL Server.
+  /// </summary>
+  /// <remarks>
+  ///  <para>This class is used to read SQL DDL objects.</para>
+  /// </remarks>
   public class SqlDdlReader : ISqlDdlReader
   {
     private readonly ISqlConnectionFactory factory;
@@ -25,6 +31,7 @@ namespace SqlVersioner.SqlServer
       get { return this.logger; }
     }
     
+    /// <inheritdoc />
     public Task<IReadOnlyList<SqlObject>> OpenSqlSchemasAsync(CancellationToken cancelToken = default)
     {
       cancelToken.ThrowIfCancellationRequested();
@@ -39,6 +46,7 @@ WHERE S.NAME NOT IN ('GUEST', 'SYS', 'DB_OWNER', 'DB_ACCESSADMIN', 'DB_SECURITYA
                      'DB_BACKUPOPERATOR', 'DB_DATAREADER', 'DB_DATAWRITER', 'DB_DENYDATAREADER', 'DB_DENYDATAWRITER');", cancelToken);
     }
 
+    /// <inheritdoc />
     public Task<IReadOnlyList<SqlObject>> OpenSqlTablesAsync(CancellationToken cancelToken = default)
     {
       cancelToken.ThrowIfCancellationRequested();
@@ -54,6 +62,7 @@ WHERE O.TYPE = 'U' AND schema_name(o.[SCHEMA_ID]) <> 'sys')
 SELECT T.[SCHEMA_NAME], T.[OBJECT_NAME], T.[TYPE], dbo.FN_EXPORT_TABLE_DDL(T.FULL_NAME) AS [DEFINITION] FROM ALL_TABLES T", cancelToken);
     }
     
+    /// <inheritdoc />
     public Task<IReadOnlyList<SqlObject>> OpenSqlFunctionsAsync(CancellationToken cancelToken = default)
     {
       cancelToken.ThrowIfCancellationRequested();
@@ -68,6 +77,7 @@ FROM SYS.SQL_MODULES M
 INNER JOIN ALL_FUNCTIONS F ON F.OBJECT_ID = M.OBJECT_ID;", cancelToken);
     }
     
+    /// <inheritdoc />
     public Task<IReadOnlyList<SqlObject>> OpenSqlProceduresAsync(CancellationToken cancelToken = default)
     {
       cancelToken.ThrowIfCancellationRequested();
@@ -82,6 +92,7 @@ FROM SYS.SQL_MODULES M
 INNER JOIN ALL_PROCEDURES P ON P.OBJECT_ID = M.OBJECT_ID;", cancelToken);
     }
     
+    /// <inheritdoc />
     public Task<IReadOnlyList<SqlObject>> OpenSqlViewsAsync(CancellationToken cancelToken = default)
     {
       cancelToken.ThrowIfCancellationRequested();
@@ -305,6 +316,7 @@ INNER JOIN ALL_VIEWS V ON V.OBJECT_ID = M.OBJECT_ID;", cancelToken);
       }
     }
     
+    /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
       await DropAsync();
