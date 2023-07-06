@@ -75,9 +75,33 @@ namespace SqlVersioner.Abstractions.Arguments
           case "--verbosity":
             arguments.Verbosity = int.Parse(args[++index]);
             break;
+          case "--help":
+            throw new CliArgumentException("GetHelp was requested.");
+          default: 
+            throw new CliArgumentException($"Unknown argument: {arg}");
         }
       }
       return arguments.Validate();
+    }
+
+    /// <summary>
+    /// Gets the usage message
+    /// </summary>
+    /// <returns>The usage message</returns>
+    public static string GetUsage()
+    {
+      return $@"
+sqlversioner --user <user> --password <password> --database <database> --server <server> --output <output> [--verbosity <verbosity>]
+
+Options:
+
+--user      <{nameof(User)}>..............The user to connect to the database
+--password  <{nameof(Password)}>..........The password to connect to the database
+--database  <{nameof(Database)}>..........The database to connect to
+--server    <{nameof(Server)}>............The server to connect to
+--output    <{nameof(Output)}>............The output directory
+--verbosity <{nameof(Verbosity)}>.........The verbosity level. Allowed values are: 0 - Quiet, 1 - Minimal, 2 - Normal, 3 - Detailed. Default is 1.
+--help..........................Shows this help message";
     }
   }
 }

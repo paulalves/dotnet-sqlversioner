@@ -17,10 +17,9 @@
     /// <returns>The exit code.</returns>
     public static async Task<int> Main(string[] args)
     {
-      var arguments = CliArguments.Parse(args);
-      
       try
       {
+        var arguments = CliArguments.Parse(args);
         var builder = new SqlConnectionStringBuilder
         {
           UserID = arguments.User,
@@ -32,10 +31,16 @@
         };
 
         await Database
-          .WriteAsync(
-            builder.ConnectionString, 
-            arguments.Output, arguments.Verbosity)
+          .WriteAsync(builder.ConnectionString,
+            arguments.Output,
+            arguments.Verbosity)
           .ConfigureAwait(false);
+      }
+      catch (CliArgumentException e)
+      {
+        Console.WriteLine(e.Message);
+        Console.WriteLine();
+        Console.WriteLine(CliArguments.GetUsage());
       }
       catch (Exception e)
       {
