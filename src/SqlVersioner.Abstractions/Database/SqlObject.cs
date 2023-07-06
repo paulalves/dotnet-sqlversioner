@@ -3,6 +3,12 @@ namespace SqlVersioner.Abstractions.Database
   using System;
   using System.Text;
 
+  /// <summary>
+  /// SQL object.
+  /// </summary>
+  /// <remarks>
+  ///  <para>This class is used to represent a SQL object.</para>
+  /// </remarks>
   public record SqlObject(string Schema, string ObjectName, string Type, string Definition)
   {
     public override string ToString()

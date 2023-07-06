@@ -2,6 +2,9 @@ namespace SqlVersioner.Abstractions.Arguments
 {
   using System;
 
+  /// <summary>
+  /// Command line arguments
+  /// </summary>
   public class CliArguments
   {
 #pragma warning disable CS8618
@@ -10,12 +13,23 @@ namespace SqlVersioner.Abstractions.Arguments
     {
       Verbosity = 1;
     }
-    
+
+    /// <summary>The user to connect to the database </summary>
     public string User { get; private set; }
+    
+    /// <summary>The password to connect to the database</summary>
     public string Password { get; private set; }
+    
+    /// <summary>The database to connect to</summary>
     public string Database { get; private set; }
+    
+    /// <summary>The server to connect to</summary>
     public string Server { get; private set; }
+    
+    /// <summary>The output directory</summary>
     public string Output { get; private set; }
+    
+    /// <summary>The verbosity level</summary>
     public int Verbosity { get; private set; }
     
     private CliArguments Validate()
@@ -29,6 +43,12 @@ namespace SqlVersioner.Abstractions.Arguments
       return this;      
     }
     
+    /// <summary>
+    /// Parses the command line arguments
+    /// </summary>
+    /// <param name="args">Program arguments</param>
+    /// <returns>The parsed arguments</returns>
+    /// <exception cref="CliArgumentException">Thrown when the arguments are invalid</exception>
     public static CliArguments Parse(string[] args)
     {
       var arguments = new CliArguments();
