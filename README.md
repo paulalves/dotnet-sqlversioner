@@ -20,7 +20,7 @@ Create a `nuget.config` file in the root of the directory where you want to inst
 Then install the tool:
 
 ```bash
-dotnet tool install --global SqlVersioner.CliTool --version 0.1.0-ci0012
+dotnet tool install --global SqlVersioner.CliTool
 ```
 
 ## Usage
