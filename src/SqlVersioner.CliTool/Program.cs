@@ -5,8 +5,16 @@
   using Microsoft.Data.SqlClient;
   using SqlVersioner.Abstractions.Arguments;
 
+  /// <summary>
+  /// Program class.
+  /// </summary>
   public static class Program
   {
+    /// <summary>
+    /// Main method.
+    /// </summary>
+    /// <param name="args">The arguments.</param>
+    /// <returns>The exit code.</returns>
     public static async Task<int> Main(string[] args)
     {
       var arguments = CliArguments.Parse(args);

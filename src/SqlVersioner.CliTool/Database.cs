@@ -10,12 +10,23 @@ namespace SqlVersioner.CliTool
   using SqlVersioner.CliTool.Logging;
   using SqlVersioner.SqlServer;
 
+  /// <summary>
+  /// Database class.
+  /// </summary>
+  /// <remarks>
+  /// <para>This class is used to write the SQL DDL objects to the file system.</para>
+  /// </remarks>
   public class Database
   {
     private readonly SqlConnectionFactory factory;
     private readonly SqlConnectionStringBuilder builder;
     private readonly ILogger logger;
     
+    /// <summary>
+    /// Constructor with arguments.
+    /// </summary>
+    /// <param name="connectionString">The connection string.</param>
+    /// <param name="verbosity">The verbosity level.</param>
     public Database(string connectionString, int verbosity = 2)
     {
       this.logger = new Logger(verbosity);
@@ -28,12 +39,36 @@ namespace SqlVersioner.CliTool
       get { return this.logger; }
     }
 
+    /// <summary>
+    /// Writes the SQL DDL objects to the file system.
+    /// </summary>
+    /// <param name="connectionString">The connection string.</param>
+    /// <param name="path">The path.</param>
+    /// <param name="verbosity">The verbosity level.</param>
+    /// <param name="cancelToken">The cancellation token.</param>
+    /// <returns>Returns a <see cref="ValueTask"/> promise.</returns>
+    /// <exception cref="ArgumentNullException">The path cannot be null, empty, or whitespace.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory does not exist.</exception>
+    /// <exception cref="IOException">An I/O error occurred while opening the file.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller does not have the required permission.</exception>
+    /// <exception cref="OperationCanceledException">The operation was canceled.</exception> 
     public static async ValueTask WriteAsync(string connectionString, string path, int verbosity, CancellationToken cancelToken = default)
     {
       var database = new Database(connectionString, verbosity);
       await database.WriteAsync(path, cancelToken);
     }
     
+    /// <summary>
+    /// Writes the SQL DDL objects to the file system.
+    /// </summary>
+    /// <param name="path">The path.</param>
+    /// <param name="cancelToken">The cancellation token.</param>
+    /// <returns>Returns a <see cref="ValueTask"/> promise.</returns>
+    /// <exception cref="ArgumentNullException">The path cannot be null, empty, or whitespace.</exception>
+    /// <exception cref="DirectoryNotFoundException">The directory does not exist.</exception>
+    /// <exception cref="IOException">An I/O error occurred while opening the file.</exception>
+    /// <exception cref="UnauthorizedAccessException">The caller does not have the required permission.</exception>
+    /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
     private async ValueTask WriteAsync(string path, CancellationToken cancelToken = default)
     {
       if (string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path), "The path cannot be null, empty, or whitespace.");
