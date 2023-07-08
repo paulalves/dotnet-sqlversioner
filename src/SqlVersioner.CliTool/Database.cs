@@ -55,7 +55,7 @@ namespace SqlVersioner.CliTool
     public static async ValueTask WriteAsync(string connectionString, string path, int verbosity, CancellationToken cancelToken = default)
     {
       var database = new Database(connectionString, verbosity);
-      await database.WriteAsync(path, cancelToken);
+      await database.WriteAsync(path, cancelToken).ConfigureAwait(false);
     }
     
     /// <summary>
@@ -83,7 +83,7 @@ namespace SqlVersioner.CliTool
         {
           var directory = Directory.CreateDirectory(Path.Combine(path, builder.DataSource, builder.InitialCatalog, "schemas"));
           var script = Path.Combine(directory.FullName, $"{schema.ObjectName}.sql");
-          await File.WriteAllTextAsync(script, schema.ToString(), Encoding.UTF8, cancelToken);    
+          await File.WriteAllTextAsync(script, schema.ToString(), Encoding.UTF8, cancelToken).ConfigureAwait(false);    
         }
         
         Logger.LogMinimal("==== Writing Tables to {0}", path);
@@ -91,7 +91,7 @@ namespace SqlVersioner.CliTool
         {
           var directory = Directory.CreateDirectory(Path.Combine(path, builder.DataSource, builder.InitialCatalog, "tables"));
           var table = Path.Combine(directory.FullName, $"{tables.ObjectName}.sql");
-          await File.WriteAllTextAsync(table, tables.ToString(), Encoding.UTF8, cancelToken);    
+          await File.WriteAllTextAsync(table, tables.ToString(), Encoding.UTF8, cancelToken).ConfigureAwait(false);    
         }
         
         Logger.LogMinimal("==== Writing Functions to {0}", path);
@@ -99,7 +99,7 @@ namespace SqlVersioner.CliTool
         {
           var directory = Directory.CreateDirectory(Path.Combine(path, builder.DataSource, builder.InitialCatalog, "functions"));
           var function = Path.Combine(directory.FullName, $"{functions.ObjectName}.sql");
-          await File.WriteAllTextAsync(function, functions.ToString(), Encoding.UTF8, cancelToken);    
+          await File.WriteAllTextAsync(function, functions.ToString(), Encoding.UTF8, cancelToken).ConfigureAwait(false);    
         }
         
         Logger.LogMinimal("==== Writing Procedures to {0}", path);
@@ -107,7 +107,7 @@ namespace SqlVersioner.CliTool
         {
           var directory = Directory.CreateDirectory(Path.Combine(path, builder.DataSource, builder.InitialCatalog, "procedures"));
           var procedure = Path.Combine(directory.FullName, $"{procedures.ObjectName}.sql");
-          await File.WriteAllTextAsync(procedure, procedures.ToString(), Encoding.UTF8, cancelToken);    
+          await File.WriteAllTextAsync(procedure, procedures.ToString(), Encoding.UTF8, cancelToken).ConfigureAwait(false);    
         }
         
         Logger.LogMinimal("==== Writing Views to {0}", path);
@@ -115,7 +115,7 @@ namespace SqlVersioner.CliTool
         {
           var directory = Directory.CreateDirectory(Path.Combine(path, builder.DataSource, builder.InitialCatalog, "views"));
           var view = Path.Combine(directory.FullName, $"{views.ObjectName}.sql");
-          await File.WriteAllTextAsync(view, views.ToString(), Encoding.UTF8, cancelToken);    
+          await File.WriteAllTextAsync(view, views.ToString(), Encoding.UTF8, cancelToken).ConfigureAwait(false);    
         }
       }
     }
