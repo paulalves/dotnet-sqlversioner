@@ -7,7 +7,6 @@ namespace SqlVersioner.Abstractions.Database
   /// <summary>
   /// SQL object async enumerable.
   /// </summary>
-  /// <remarks>
   public class SqlObjectAsyncEnumerable : IAsyncEnumerable<SqlObject>
   {
     private readonly IDataReader reader;
